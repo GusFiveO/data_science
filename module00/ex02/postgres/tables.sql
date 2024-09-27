@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS public.data_2022_oct (
 	event_type character varying(16) NOT NULL,
 	product_id integer NOT NULL,
 	price FLOAT NOT NULL,
-	user_id integer NOT NULL,
+	user_id BIGINT NOT NULL,
 	user_session UUID
 );
 
