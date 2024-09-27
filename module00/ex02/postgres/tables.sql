@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS public.data_2022_oct (
 
 -- COPY public.data_2022_dec FROM '/customer/data_2022_dec.csv' DELIMITER ',' CSV HEADER;
 
-COPY public.data_2022_oct FROM '/docker-entrypoint-initdb.d/customer/data_2022_oct.csv' DELIMITER ',' CSV HEADER;
+COPY public.data_2022_oct FROM '/docker-entrypoint-initdb.d/subject/customer/data_2022_oct.csv' DELIMITER ',' CSV HEADER;
 
 -- COPY public.data_2022_nov FROM '/customer/data_2022_nov.csv' DELIMITER ',' CSV HEADER;
 

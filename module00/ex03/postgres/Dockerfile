@@ -2,9 +2,8 @@ FROM postgres:16
 
 RUN apt update && apt install unzip
 
-WORKDIR /docker-entrypoint-initdb.d
-
-COPY --chown=postgres:postgres ./tables.sql ./tables.sql
+COPY --chown=postgres:postgres ./generate_tables.sh .
 ADD https://cdn.intra.42.fr/document/document/25745/subject.zip .
 
-RUN unzip subject.zip 
+RUN unzip subject.zip
+RUN ./generate_tables.sh
