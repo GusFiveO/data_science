@@ -50,3 +50,15 @@ CREATE TABLE customers as
 	SELECT * FROM data_2022_dec
 	UNION
 	SELECT * FROM data_2023_jan
+ 	
+INSERT INTO public.customers (event_time, event_type, product_id, price, user_id, user_session)
+SELECT 
+    MIN(event_time) AS event_time, 
+    event_type, 
+    product_id, 
+    price, 
+    user_id, 
+    user_session
+FROM public.customers
+GROUP BY event_type, product_id, price, user_id, user_session
+ORDER BY event_time;
