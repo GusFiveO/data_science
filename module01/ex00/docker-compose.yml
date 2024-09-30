@@ -4,6 +4,8 @@ services:
     restart: always
     networks:
       - pg
+    ports:
+      - "5432:5432"
     env_file:
       - ./postgres/.env
  

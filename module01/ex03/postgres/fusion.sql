@@ -42,23 +42,24 @@ COPY public.data_2022_dec FROM '/docker-entrypoint-initdb.d/subject/customer/dat
 
 COPY public.data_2023_jan FROM '/docker-entrypoint-initdb.d/subject/customer/data_2023_jan.csv' DELIMITER ',' CSV HEADER;
 
-CREATE TABLE customers as
+CREATE TABLE public.customers as
 	SELECT * FROM data_2022_oct
 	UNION
 	SELECT * FROM data_2022_nov
 	UNION
 	SELECT * FROM data_2022_dec
 	UNION
-	SELECT * FROM data_2023_jan
+	SELECT * FROM data_2023_jan;
  	
-INSERT INTO public.customers (event_time, event_type, product_id, price, user_id, user_session)
-SELECT 
-    MIN(event_time) AS event_time, 
-    event_type, 
-    product_id, 
-    price, 
-    user_id, 
-    user_session
-FROM public.customers
-GROUP BY event_type, product_id, price, user_id, user_session
-ORDER BY event_time;
+WITH ranked_customers AS (
+  SELECT *,
+         ROW_NUMBER() OVER (PARTITION BY event_type, product_id, price, user_id, user_session 
+                            ORDER BY event_time) AS rn
+  FROM public.customers
+)
+DELETE FROM public.customers
+WHERE (event_type, product_id, price, user_id, user_session, event_time) IN (
+    SELECT event_type, product_id, price, user_id, user_session, event_time
+    FROM ranked_customers
+    WHERE rn > 1
+);
