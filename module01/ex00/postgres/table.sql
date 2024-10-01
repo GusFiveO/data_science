@@ -5,7 +5,6 @@ CREATE TABLE IF NOT EXISTS public.items (
 	brand character varying(255)
 );
 
-
 CREATE TABLE IF NOT EXISTS public.data_2022_oct (
 	event_time timestamp,
 	event_type character varying(16) NOT NULL,

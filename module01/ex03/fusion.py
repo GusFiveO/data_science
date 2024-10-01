@@ -8,7 +8,7 @@ con = psycopg2.connect(
 )
 
 with con.cursor() as cursor:
-    with open("customers_table.sql", "r") as sql_file:
+    with open("fusion.sql", "r") as sql_file:
         cursor.execute(sql_file.read())
     con.commit()
     con.close()
