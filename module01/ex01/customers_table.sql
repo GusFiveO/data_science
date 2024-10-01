@@ -1,8 +1,10 @@
 CREATE TABLE customers as
 	SELECT * FROM data_2022_oct
-	UNION
+	UNION ALL
 	SELECT * FROM data_2022_nov
-	UNION
+	UNION ALL
 	SELECT * FROM data_2022_dec
-	UNION
+	UNION ALL
 	SELECT * FROM data_2023_jan
+	UNION ALL
+	SELECT * FROM data_2023_feb
