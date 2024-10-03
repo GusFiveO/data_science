@@ -1,5 +1,4 @@
 import matplotlib.pyplot as plt
-import seaborn as sns
 from models import Customers
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, select, func
