@@ -19,6 +19,7 @@ with Session(engine) as session:
     response = session.execute(statement)
     event_type_list = list(response)
     event_types, count = zip(*event_type_list)
+    plt.style.use("seaborn-v0_8")
     fig, ax = plt.subplots()
     ax.pie(count, labels=event_types, autopct="%1.1f%%")
     plt.show()
