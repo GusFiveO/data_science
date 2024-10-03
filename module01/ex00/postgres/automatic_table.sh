@@ -7,6 +7,7 @@ db_user=$POSTGRES_USER
 db_password=$POSTGRES_PASSWORD
 
 for csv_file in "$csv_folder"/*.csv; do
+    echo "$csv_file"
     table_name=$(basename "$csv_file" .csv)
 
     echo "Creating table $table_name"

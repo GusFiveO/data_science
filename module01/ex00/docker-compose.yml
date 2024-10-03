@@ -8,6 +8,26 @@ services:
       - "5432:5432"
     env_file:
       - ./postgres/.env
+    volumes:
+      - /mnt/nfs/homes/alorain/goinfre/subject:/subject/
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
+  initializer:
+    build: ./postgres/initialize
+    networks:
+      - pg
+    env_file: 
+      - ./postgres/.env
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - /mnt/nfs/homes/alorain/goinfre/subject/customer:/subject/customer
  
 
   adminer:
