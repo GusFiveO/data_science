@@ -32,7 +32,7 @@ with Session(engine) as session:
     plt.show()
 
     statement = (
-        select(func.count(Customers.price))
+        select(func.sum(Customers.price))
         .where(Customers.event_type == "purchase")
         .group_by(Customers.user_id)
     )
