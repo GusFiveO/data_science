@@ -30,12 +30,13 @@ with Session(engine) as session:
     plt.boxplot(price_df, sym="", widths=0.75, vert=False)
     plt.show()
 
-    statement = (
-        select(func.sum(Customers.price))
+    sales = (
+        select(func.sum(Customers.price), Customers.user_id)
         .where(Customers.event_type == "purchase")
-        .group_by(Customers.user_id)
+        .group_by(Customers.user_session, Customers.user_id)
+        .cte("sales")
     )
-
+    statement = select(func.avg(sales.columns.sum)).group_by(sales.columns.user_id)
     response = session.execute(statement)
     average_basket_price_per_user = list(response)
     average_basket_df = pd.DataFrame(average_basket_price_per_user)

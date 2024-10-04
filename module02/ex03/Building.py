@@ -1,5 +1,5 @@
 import numpy as np
-from sqlalchemy import create_engine, select, func
+from sqlalchemy import create_engine, distinct, select, func
 import matplotlib.pyplot as plt
 from models import Customers
 from sqlalchemy.orm import Session
@@ -16,6 +16,7 @@ url = f"postgresql://{user}:{password}@{host}:{port}/{database}"
 engine = create_engine(url)
 with Session(engine) as session:
     statement = (
+        # select(func.count(distinct(Customers.user_session)))
         select(func.count())
         .where(Customers.event_type == "purchase")
         .group_by(Customers.user_id)
@@ -31,7 +32,7 @@ with Session(engine) as session:
     plt.show()
 
     statement = (
-        select(func.sum(Customers.price))
+        select(func.count(Customers.price))
         .where(Customers.event_type == "purchase")
         .group_by(Customers.user_id)
     )
