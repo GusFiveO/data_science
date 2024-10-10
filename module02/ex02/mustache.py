@@ -24,10 +24,17 @@ with Session(engine) as session:
     purchased_product_price_list = list(response)
     price_df = pd.DataFrame(purchased_product_price_list)
     print(price_df.describe().apply(lambda s: s.apply("{0:.5f}".format)))
+
     plt.style.use("seaborn-v0_8")
+
     plt.boxplot(price_df, sym="gD", widths=0.75, vert=False)
+    plt.xlabel("price in ₳")
+    plt.title("Purchases price")
     plt.show()
+
     plt.boxplot(price_df, sym="", widths=0.75, vert=False)
+    plt.xlabel("price in ₳")
+    plt.title("Purchases price")
     plt.show()
 
     sales = (
@@ -40,6 +47,8 @@ with Session(engine) as session:
     response = session.execute(statement)
     average_basket_price_per_user = list(response)
     average_basket_df = pd.DataFrame(average_basket_price_per_user)
-    # print(average_basket_df.describe().apply(lambda s: s.apply("{0:.5f}".format)))
+
     plt.boxplot(average_basket_df, sym="gD", widths=0.75, vert=False)
+    plt.title("Average basket price per user")
+    plt.xlabel("price ₳")
     plt.show()

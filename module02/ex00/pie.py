@@ -22,4 +22,5 @@ with Session(engine) as session:
     plt.style.use("seaborn-v0_8")
     fig, ax = plt.subplots()
     ax.pie(count, labels=event_types, autopct="%1.1f%%")
+    plt.title("Event distribution")
     plt.show()

@@ -19,35 +19,41 @@ url = f"postgresql://{user}:{password}@{host}:{port}/{database}"
 
 engine = create_engine(url)
 with Session(engine) as session:
-    statement = select(
-        func.count(case((Customers.event_type == "purchase", 1))).label(
-            "purchase_frequency"
-        ),
-        func.sum(
-            case(
-                (Customers.event_type == "purchase", Customers.price),
-                else_=0,
-            )
-        ).label("total_spent"),
-    ).group_by(Customers.user_id)
+
+    statement = (
+        select(
+            Customers.user_id,
+            func.count((Customers.event_type)).label("purchase_frequency"),
+            func.sum(
+                (Customers.price),
+            ).label("total_spent"),
+        )
+        .where(Customers.event_type == "purchase")
+        .group_by(Customers.user_id)
+    )
     response = session.execute(statement)
     customers_features = list(response)
     customers_features_df = pd.DataFrame(customers_features)
 
     print(customers_features_df)
     scaler = StandardScaler()
-    data_scaled = scaler.fit_transform(customers_features_df)
+    data_scaled = scaler.fit_transform(
+        customers_features_df[
+            [
+                "purchase_frequency",
+                "total_spent",
+            ]
+        ]
+    )
     print(data_scaled)
     wcss = []
-    # for i in range(1, 11):
-    #     kmeans = KMeans(
-    #         n_clusters=i, init="k-means++", max_iter=300, n_init=10, random_state=0
-    #     )
-    #     kmeans.fit(data_scaled)
-    #     wcss.append(kmeans.inertia_)
 
     kmeans = KMeans(
-        n_clusters=4, init="k-means++", max_iter=300, n_init=10, random_state=0
+        n_clusters=4,
+        init="k-means++",
+        max_iter=300,
+        n_init=10,
+        random_state=0,
     )
     customers_features_df["Cluster"] = kmeans.fit_predict(data_scaled)
 
@@ -81,20 +87,27 @@ with Session(engine) as session:
     plt.show()
 
     cluster_counts = customers_features_df["Cluster"].value_counts()
-    total_spent_per_cluster = customers_features_df.groupby("Cluster")[
-        "total_spent"
-    ].sum()
+    print(cluster_counts)
 
     # Plot the bar chart
     plt.figure(figsize=(8, 5))
-    total_spent_per_cluster.plot(kind="bar", color=["blue", "green", "orange", "red"])
 
-    plt.title("Total sales in Each Cluster")
-    plt.xlabel("Cluster")
-    plt.ylabel("Total sales")
+    cluster_labels = {1: "silver", 2: "gold", 0: "platinum", 3: "diamond"}
+    cluster_counts.index = cluster_counts.index.map(cluster_labels)
 
-    plt.ticklabel_format(style="plain", axis="y")
+    # cluster_counts.plot(kind="bar", color=["blue", "green", "orange", "red"])
+    plt.barh(
+        cluster_counts.index[::-1],
+        cluster_counts.values[::-1],
+        color=["aqua", "darkgrey", "gold", "silver"],
+    )
+
+    plt.title("Customers in Each Cluster")
+    plt.ylabel("Cluster")
+    plt.xlabel("number of customers")
+
+    plt.ticklabel_format(style="plain", axis="x")
     formatter = EngFormatter()
-    plt.gca().yaxis.set_major_formatter(formatter)
+    plt.gca().xaxis.set_major_formatter(formatter)
 
     plt.show()

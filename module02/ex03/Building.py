@@ -20,7 +20,6 @@ with Session(engine) as session:
         select(func.count())
         .where(Customers.event_type == "purchase")
         .group_by(Customers.user_id)
-        # .limit(1000)
     )
 
     response = session.scalars(statement)
@@ -29,6 +28,10 @@ with Session(engine) as session:
     bins = np.arange(0, 50, 10)
     plt.style.use("seaborn-v0_8")
     plt.hist(order_frequency, bins=bins)
+    plt.xticks(bins)
+    plt.ylabel("customers")
+    plt.xlabel("frequency")
+    plt.title("Cutomers purchase frequency")
     plt.show()
 
     statement = (
@@ -41,4 +44,8 @@ with Session(engine) as session:
     alt_spent_per_customer = list(response)
     bins = np.arange(0, 201, 50)
     plt.hist(alt_spent_per_customer, bins=bins)
+    plt.xticks(bins)
+    plt.ylabel("customers")
+    plt.xlabel("monetary value in ₳")
+    plt.title("Monetary distribution")
     plt.show()

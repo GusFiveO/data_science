@@ -82,6 +82,7 @@ ADD COLUMN category_codes character varying(255)[],
 ADD COLUMN brands character varying(255)[];
 
 
+
 WITH non_null_items AS (
     SELECT 
         product_id,
