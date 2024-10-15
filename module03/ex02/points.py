@@ -1,6 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-import seaborn as sns
+
+pd.set_option("future.no_silent_downcasting", True)
 
 test_file_path = "../Test_knight.csv"
 train_file_path = "../Train_knight.csv"
