@@ -1,7 +1,6 @@
 import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
 
 truth_file_path = "../truth.txt"
 predictions_file_path = "../predictions.txt"
@@ -20,7 +19,8 @@ def load_file(file_path):
 truth_list = load_file(truth_file_path)
 predictions_list = load_file(predictions_file_path)
 
-mapping = {"Jedi": 1, "Sith": 0}
+# mapping = {"Jedi": 1, "Sith": 0}
+mapping = {"Jedi": 0, "Sith": 1}
 labels = ["Jedi", "Sith"]
 
 
@@ -31,8 +31,8 @@ predictions_list = [mapping[elem] for elem in predictions_list]
 confusion_matrix = np.matrix("0 0; 0 0")
 
 for truth, prediction in zip(truth_list, predictions_list):
-    confusion_matrix[1 - truth, 1 - prediction] += 1
-    # confusion_matrix[truth, prediction] += 1
+    # confusion_matrix[1 - truth, 1 - prediction] += 1
+    confusion_matrix[truth, prediction] += 1
 
 TP_jedi = confusion_matrix[0, 0]
 FP_jedi = confusion_matrix[0, 1]
