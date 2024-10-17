@@ -1,14 +1,26 @@
 import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler
+
 
 train_file_path = "../Train_knight.csv"
 
 train_df = pd.read_csv(train_file_path)
 
 train_df = train_df.select_dtypes("number")
+scaler = StandardScaler()
+scaled_df = scaler.fit_transform(train_df)
 
-std_list = []
-for series_name, serie in train_df.items():
-    print(serie)
-    std_list.append(float(serie.std()))
-    # std_list.append(float(serie.var()))
-print(std_list)
+var_ratio = []
+for num in range(1, len(train_df.columns) + 1):
+    pca = PCA(n_components=num)
+    pca.fit(scaled_df)
+    var_ratio.append(sum(pca.explained_variance_ratio_) * 100)
+
+var_ratio = np.array(var_ratio)
+print(pca.explained_variance_)
+print(var_ratio)
+plt.plot(var_ratio)
+plt.show()
