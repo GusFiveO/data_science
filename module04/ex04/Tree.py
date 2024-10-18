@@ -49,9 +49,6 @@ def feature_selection(df):
     )
 
 
-# training_file_path = "./Training_knight.csv"
-# validation_file_path = "./Validation_knight.csv"
-
 try:
     training_file_path = sys.argv[1]
     validation_file_path = sys.argv[2]
