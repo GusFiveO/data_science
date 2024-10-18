@@ -54,3 +54,6 @@ print(
     "F1-Score:",
     f1_score(truth, prediction, labels=["Jedi", "Sith"], average="weighted"),
 )
+
+test_prediction = votting_classifier.predict(test_df)
+save_list("Voting.txt", test_prediction)
