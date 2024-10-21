@@ -4,6 +4,17 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 
+
+def VIF(df):
+    vif_data = pd.DataFrame()
+    vif_data["feature"] = df.columns
+    vif_data["VIF"] = [
+        variance_inflation_factor(df.values, i) for i in range(len(df.columns))
+    ]
+    vif_data["Tolerance"] = 1 / vif_data["VIF"]
+    print(vif_data)
+
+
 train_file_path = "../Train_knight.csv"
 
 train_df = pd.read_csv(train_file_path)
@@ -14,7 +25,8 @@ scaler = StandardScaler()
 scaled_values = scaler.fit_transform(train_df)
 train_df.loc[:, :] = scaled_values
 
-vif_data = pd.DataFrame()
+VIF(train_df)
+
 train_df = train_df.drop(
     [
         "Sensitivity",
@@ -38,11 +50,8 @@ train_df = train_df.drop(
     ],
     axis=1,
 )
-vif_data["feature"] = train_df.columns
-vif_data["VIF"] = [
-    variance_inflation_factor(train_df.values, i) for i in range(len(train_df.columns))
-]
-print(vif_data)
+print("-----AFTER FEATURE SELECTION-----")
+VIF(train_df)
 corr = train_df.corr()
 
 sns.heatmap(corr)
