@@ -12,6 +12,32 @@ def save_list(filename, list):
             txt_file.write(line + "\n")
 
 
+def feature_selection(df):
+    return df.drop(
+        [
+            "Sensitivity",
+            "Strength",
+            "Recovery",
+            "Stims",
+            "Midi-chlorien",
+            "Awareness",
+            "Slash",
+            "Empowered",
+            "Delay",
+            "Power",
+            "Lightsaber",
+            "Prescience",
+            "Evade",
+            "Attunement",
+            "Dexterity",
+            "Combo",
+            "Repulse",
+            "Burst",
+        ],
+        axis=1,
+    )
+
+
 try:
 
     train_file_path = sys.argv[1]
@@ -19,6 +45,9 @@ try:
 
     train_df = pd.read_csv(train_file_path)
     test_df = pd.read_csv(test_file_path)
+
+    train_df = feature_selection(train_df)
+    test_df = feature_selection(test_df)
 
     validation_df = train_df.sample(frac=0.2, random_state=42)
     train_df = train_df.drop(validation_df.index)
