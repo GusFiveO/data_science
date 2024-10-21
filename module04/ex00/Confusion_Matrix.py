@@ -17,8 +17,8 @@ def create_confusion_matrix(truth_list, predictions_list, mapping):
 
 def calculate_scores(confusion_matrix):
     TP_jedi = confusion_matrix[0, 0]
-    FP_jedi = confusion_matrix[0, 1]
-    FN_jedi = confusion_matrix[1, 0]
+    FP_jedi = confusion_matrix[1, 0]
+    FN_jedi = confusion_matrix[0, 1]
     TN_jedi = confusion_matrix[1, 1]
 
     precision_jedi = TP_jedi / (TP_jedi + FP_jedi)
