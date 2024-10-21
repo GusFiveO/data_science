@@ -8,7 +8,7 @@ train_file_path = "../Train_knight.csv"
 
 train_df = pd.read_csv(train_file_path)
 
-train_df.replace({"Sith": 0, "Jedi": 1}, inplace=True)
+train_df.replace({"Sith": 1, "Jedi": 0}, inplace=True)
 
 corr = train_df.corr()
 

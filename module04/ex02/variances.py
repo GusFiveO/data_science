@@ -20,7 +20,9 @@ for num in range(1, len(train_df.columns) + 1):
     var_ratio.append(sum(pca.explained_variance_ratio_) * 100)
 
 var_ratio = np.array(var_ratio)
-print(pca.explained_variance_)
+print(pca.explained_variance_ratio_)
 print(var_ratio)
 plt.plot(var_ratio)
+plt.xlabel("Number of Components")
+plt.ylabel("Explained Variance (%)")
 plt.show()
