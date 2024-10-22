@@ -46,9 +46,6 @@ try:
     train_df = pd.read_csv(train_file_path)
     test_df = pd.read_csv(test_file_path)
 
-    # train_df = feature_selection(train_df)
-    # test_df = feature_selection(test_df)
-
     validation_df = train_df.sample(frac=0.2, random_state=42)
     train_df = train_df.drop(validation_df.index)
 
@@ -68,7 +65,7 @@ try:
     test_df.loc[:, :] = scaled_values
 
     precision_list = []
-    for k_value in range(1, 31):
+    for k_value in range(1, 41):
         knn = KNeighborsClassifier(n_neighbors=k_value)
         knn.fit(train_df, target)
         prediction = knn.predict(validation_df)
@@ -78,7 +75,7 @@ try:
             )
         )
     max_index = precision_list.index(max(precision_list))
-    knn = KNeighborsClassifier(n_neighbors=max_index + 1)
+    knn = KNeighborsClassifier(n_neighbors=40)
     knn.fit(train_df, target)
     prediction = knn.predict(validation_df)
     print(
