@@ -46,8 +46,8 @@ try:
     train_df = pd.read_csv(train_file_path)
     test_df = pd.read_csv(test_file_path)
 
-    train_df = feature_selection(train_df)
-    test_df = feature_selection(test_df)
+    # train_df = feature_selection(train_df)
+    # test_df = feature_selection(test_df)
 
     validation_df = train_df.sample(frac=0.2, random_state=42)
     train_df = train_df.drop(validation_df.index)

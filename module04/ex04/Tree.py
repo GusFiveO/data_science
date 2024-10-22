@@ -77,6 +77,9 @@ try:
     scaled_values = scaler.fit_transform(validation_df)
     validation_df.loc[:, :] = scaled_values
 
+    scaled_values = scaler.fit_transform(test_df)
+    test_df.loc[:, :] = scaled_values
+
     clf = RandomForestClassifier(class_weight="balanced")
     clf.fit(train_df, target)
 

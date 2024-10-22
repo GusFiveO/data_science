@@ -40,49 +40,52 @@ def feature_selection(df):
     )
 
 
-train_file_path = sys.argv[1]
-test_file_path = sys.argv[2]
+try:
 
-train_df = pd.read_csv(train_file_path)
-test_df = pd.read_csv(test_file_path)
+    train_file_path = sys.argv[1]
+    test_file_path = sys.argv[2]
 
-train_df = feature_selection(train_df)
-test_df = feature_selection(test_df)
+    train_df = pd.read_csv(train_file_path)
+    test_df = pd.read_csv(test_file_path)
 
+    train_df = feature_selection(train_df)
+    test_df = feature_selection(test_df)
 
-validation_df = train_df.sample(frac=0.2, random_state=42)
-train_df = train_df.drop(validation_df.index)
+    validation_df = train_df.sample(frac=0.2, random_state=42)
+    train_df = train_df.drop(validation_df.index)
 
-truth = validation_df["knight"]
-validation_df = validation_df.drop("knight", axis=1)
+    truth = validation_df["knight"]
+    validation_df = validation_df.drop("knight", axis=1)
 
-target = train_df["knight"]
-train_df = train_df.drop("knight", axis=1)
+    target = train_df["knight"]
+    train_df = train_df.drop("knight", axis=1)
 
-scaler = StandardScaler()
-scaled_values = scaler.fit_transform(train_df)
-train_df.loc[:, :] = scaled_values
+    scaler = StandardScaler()
+    scaled_values = scaler.fit_transform(train_df)
+    train_df.loc[:, :] = scaled_values
 
-scaled_values = scaler.fit_transform(validation_df)
-validation_df.loc[:, :] = scaled_values
+    scaled_values = scaler.fit_transform(validation_df)
+    validation_df.loc[:, :] = scaled_values
 
-scaled_values = scaler.fit_transform(test_df)
-test_df.loc[:, :] = scaled_values
+    scaled_values = scaler.fit_transform(test_df)
+    test_df.loc[:, :] = scaled_values
 
-knn = KNeighborsClassifier(n_neighbors=10)
-rf = RandomForestClassifier()
-lr = LogisticRegression()
+    knn = KNeighborsClassifier(n_neighbors=10)
+    rf = RandomForestClassifier()
+    lr = LogisticRegression()
 
-votting_classifier = VotingClassifier(
-    estimators=[("knn", knn), ("rf", rf), ("lr", lr)], voting="hard"
-)
+    votting_classifier = VotingClassifier(
+        estimators=[("knn", knn), ("rf", rf), ("lr", lr)], voting="hard"
+    )
 
-votting_classifier.fit(train_df, target)
-prediction = votting_classifier.predict(validation_df)
-print(
-    "F1-Score:",
-    f1_score(truth, prediction, labels=["Jedi", "Sith"], average="weighted"),
-)
+    votting_classifier.fit(train_df, target)
+    prediction = votting_classifier.predict(validation_df)
+    print(
+        "F1-Score:",
+        f1_score(truth, prediction, labels=["Jedi", "Sith"], average="weighted"),
+    )
 
-test_prediction = votting_classifier.predict(test_df)
-save_list("Voting.txt", test_prediction)
+    test_prediction = votting_classifier.predict(test_df)
+    save_list("Voting.txt", test_prediction)
+except Exception as e:
+    print(e)

@@ -1,6 +1,7 @@
 import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
+import sys
 
 
 def load_file(file_path):
@@ -75,19 +76,24 @@ def plot_confusion_matrix(confusion_matrix, labels):
     plt.show()
 
 
-truth_file_path = "../truth.txt"
-predictions_file_path = "../predictions.txt"
+try:
+    truth_file_path = sys.argv[2]
+    predictions_file_path = sys.argv[1]
 
-truth_list = load_file(truth_file_path)
-predictions_list = load_file(predictions_file_path)
+    truth_list = load_file(truth_file_path)
+    predictions_list = load_file(predictions_file_path)
 
-mapping = {"Jedi": 0, "Sith": 1}
-labels = ["Jedi", "Sith"]
+    mapping = {"Jedi": 0, "Sith": 1}
+    labels = ["Jedi", "Sith"]
 
-conf_matrix = create_confusion_matrix(truth_list, predictions_list, mapping)
+    conf_matrix = create_confusion_matrix(truth_list, predictions_list, mapping)
 
-scores = calculate_scores(conf_matrix)
+    scores = calculate_scores(conf_matrix)
 
-print_scores(scores)
+    print_scores(scores)
 
-plot_confusion_matrix(conf_matrix, labels)
+    print(conf_matrix)
+    plot_confusion_matrix(conf_matrix, labels)
+
+except Exception as e:
+    print(e)
